@@ -1,0 +1,91 @@
+.border {
+	border: 1px solid #45d6e0
+}
+
+#app {
+	width: 1200px;
+	height: 800px;
+	background-color: black;
+	position: relative;
+	/*box-sizing: border-box;*/
+}
+
+#playerPanel {
+	width: 1000px;
+	height: 400px;
+	position: absolute;
+	/*border: 1px solid white;*/
+	box-sizing: border-box;
+	border-top: 1px solid #45d6e0;
+	top: 400px;
+	color: white;
+}
+
+#enemyPanel {
+	width: 1000px;
+	height: 400px;
+	position: absolute;
+	/*border: 1px solid white;*/
+	box-sizing: border-box;
+	border-bottom: 1px solid #45d6e0;
+	color: white;
+}
+
+.gridTile {
+	background-image: url("./../images/singleTile.png");
+	width: 50px;
+	height: 50px;
+	position: relative;
+	display: inline-block;
+	padding: 0;
+	margin: 0;
+	margin-bottom: -4px;
+}
+
+#gridLayerPlayer{
+	position: absolute;
+}
+
+#objectLayerPlayer{
+	position: absolute;
+	width:1000px;
+	height:400px;
+}
+
+.ship1 {
+	/*background-image: url("./../images/ship1.png");*/
+	width: 50px;
+	height: 150px;
+	position: absolute;
+}
+
+
+.center {
+	text-align: center;
+}
+
+/* Side Panel------------------------*/
+
+#sidePanel {
+	width: 200px;
+	height: 800px;
+	border-left: 1px solid #45d6e0;
+	position: absolute;
+	box-sizing: border-box;
+	right: 0;
+	color: white;
+}
+
+#titleBox {
+	text-align: center;
+}
+
+#title{
+	margin-bottom: -10px;
+}
+
+
+
+
+
+
