@@ -60,22 +60,28 @@ class PlayerPanel extends React.Component {
 
 					var digit = String(Math.floor(gridNumber/2));
 					var endDigit;
-					if (digit.length>1){
-						endDigit = digit.charAt(1)
-					} else {
-						endDigit = digit.charAt(0)
+					if (digit.length===3){
+						endDigit = digit.charAt(2);
+					} else if (digit.length===2) {
+						endDigit = digit.charAt(1);
+					} else if(digit.length===1){
+						endDigit = digit.charAt(0);
 					}
 
 					var xLoc;
 					var digit2 = String(gridNumber);
 					if (endDigit<5){
-						if(digit2.length>1){
+						if (digit2.length===3){
+							xLoc = parseInt(digit2.charAt(2))*50;
+						} else if(digit2.length===2){
 							xLoc = parseInt(digit2.charAt(1))*50;
 						} else {
 							xLoc = parseInt(digit2.charAt(0))*50;
 						}
 					} else {
-						if(digit2.length>1){
+						if (digit2.length===3){
+							xLoc = parseInt(digit2.charAt(2))*50+500;
+						} else if(digit.length===2){
 							xLoc = parseInt(digit2.charAt(1))*50+500;
 						} else {
 							xLoc = parseInt(digit2.charAt(0))*50+500;
