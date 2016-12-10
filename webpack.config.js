@@ -8,7 +8,7 @@ module.exports = {
 		loaders:[{
 			loader:"babel",
 			test:/\.jsx?$/,
-			excludes:/node_modules/
+			exclude:/node_modules/
 		}]
 	},
 	devtool: "inline-source-map"
