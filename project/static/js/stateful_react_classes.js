@@ -3,41 +3,123 @@ import {GridTile, Ship, PlayerLabel} from "./stateless_react_classes.js"
 
 
 class EnemyPanel extends React.Component {
+	constructor(props){
+		super(props);
+		this.state={layout:"game"};
+		this.enemyGridIds={};
+		this._handleClick = this._handleClick.bind(this);
+	}
 	setupTiles() {
 		var grids=[];
 		for(var x=0; x<160; x++){
-			grids.push(<GridTile key={x}/>);
+			grids.push(<GridTile returnId={this.getGridId} gridId={x} key={x}/>);
 		}
 		return grids;
 	}
+
+	_handleClick(evt){
+		console.log(this.props.gridId);
+	}
+
+	getGridId(id){
+		console.log(id);
+	}
+
+	getRandomNumber(min, max){
+		return Math.floor(Math.random() * (max - min + 1)) + min;
+	}
+
+	initialRandomPlacement(){
+		var ships=[];
+		
+		for(var x=0; x<3; x++){
+			var notDone=true;
+			do {
+				var gridNumber = this.getRandomNumber(0,119);
+				if (this.enemyGridIds[gridNumber]===undefined &&
+					this.enemyGridIds[gridNumber+20]===undefined &&
+					this.enemyGridIds[gridNumber+40]===undefined )
+				{
+
+					var yLoc = Math.floor(gridNumber/20)*50;
+
+					var digit = String(Math.floor(gridNumber/2));
+					var endDigit;
+					if (digit.length===3){
+						endDigit = digit.charAt(2);
+					} else if (digit.length===2) {
+						endDigit = digit.charAt(1);
+					} else if(digit.length===1){
+						endDigit = digit.charAt(0);
+					}
+
+					var xLoc;
+					var digit2 = String(gridNumber);
+					if (endDigit<5){
+						if (digit2.length===3){
+							xLoc = parseInt(digit2.charAt(2))*50;
+						} else if(digit2.length===2){
+							xLoc = parseInt(digit2.charAt(1))*50;
+						} else {
+							xLoc = parseInt(digit2.charAt(0))*50;
+						}
+					} else {
+						if (digit2.length===3){
+							xLoc = parseInt(digit2.charAt(2))*50+500;
+						} else if(digit.length===2){
+							xLoc = parseInt(digit2.charAt(1))*50+500;
+						} else {
+							xLoc = parseInt(digit2.charAt(0))*50+500;
+						}
+					}
+
+					ships.push(<Ship shipId={x} key={x} xLoc={xLoc} yLoc={yLoc}/>)
+					this.enemyGridIds[gridNumber]="ship"+x;
+					this.enemyGridIds[gridNumber+20]="ship"+x;
+					this.enemyGridIds[gridNumber+40]="ship"+x;
+					
+					notDone=false;
+				}
+
+			} while(notDone===true);
+		}
+		return ships;
+	}
+
 	render(){
+		
 		return (
 			<div id="enemyPanel" className="">
-				<div id="gridLayerEnemy">{this.setupTiles()}</div>
-				<div id="objectLayerEnemy"></div>
+				<div id="objectLayerEnemy">
+					{this.initialRandomPlacement()}
+				</div>
+				<div id="gridLayerEnemy" onClick={this._handleClick}>{this.setupTiles()}</div>
 			</div>
 		)
 	}
 };
 
-
 class PlayerPanel extends React.Component {
 	constructor(props){
 		super(props);
-		this.state={layout:"setup"};
+		this.state={layout:"game"};
 		this.handleClick = this.handleClick.bind(this);
 		this.playerGridIds={};
 	}
 	setupTiles() {
 		var grids=[];
 		for(var x=0; x<160; x++){
-			grids.push(<GridTile gridId={x} key={x}/>);
+			grids.push(<GridTile returnId={this.getGridId} gridId={x} key={x}/>);
 		}
 		return grids;
 	}
 
 	handleClick(evt){
 		
+	}
+
+	getGridId(id){
+		console.log(id);
 	}
 
 	getRandomNumber(min, max){
@@ -95,7 +177,6 @@ class PlayerPanel extends React.Component {
 					
 					notDone=false;
 				}
-				console.log(this.playerGridIds);
 
 			} while(notDone===true);
 		}
@@ -107,12 +188,7 @@ class PlayerPanel extends React.Component {
 			<div id="playerPanel" className="">
 
 				<div id="objectLayerPlayer">
-				{this.initialRandomPlacement()}
-				{/*
-					<Ship shipId="1" xLoc="0" yLoc="50"/>
-					<Ship shipId="2" xLoc="500" yLoc="100"/>
-					<Ship shipId="3" xLoc="200" yLoc="200"/>
-				*/}
+					{this.initialRandomPlacement()}
 				</div>
 				<div id="gridLayerPlayer">{this.setupTiles()}</div>
 			</div>
@@ -123,7 +199,7 @@ class PlayerPanel extends React.Component {
 class SidePanel extends React.Component {
 	constructor(props){
 		super(props);
-		this.state={layout:"setup"};
+		this.state={layout:"game"};
 		this.handleClick=this.handleClick.bind(this);
 	}
 
@@ -132,11 +208,9 @@ class SidePanel extends React.Component {
 		console.log(nextState);
 	}
 	
-
 	setupLayout(){
 		return(
 			<div>
-				{/* empty comments */}
 				<div></div>
 				<button onClick={this.handleClick}>Change State</button>
 			</div>
@@ -145,14 +219,15 @@ class SidePanel extends React.Component {
 
 	gamePlayLayout(){
 		return(
-			<div>
-				<PlayerLabel num="1" username="Homer"/>
-				<PlayerLabel num="2" username=""/>
-				<button onClick={this.handleClick}>Change State</button>
+			<div id="playerlabels">
+				<PlayerLabel num="1" username={this.props.p1}/>
+				<PlayerLabel num="2" username={this.props.p2}/>
+				{/* <button onClick={this.handleClick}>Change State</button> */}
 			</div>
 		)
 	}
 
+	// test state switching button
 	handleClick() {
 		if (this.state.layout==="setup"){
 			this.setState({layout:"game"})
@@ -198,7 +273,7 @@ export default class App extends React.Component{
 			<div>
 				<EnemyPanel/>
 				<PlayerPanel/>
-				<SidePanel title="Space Bomber">by Raymond Chow</SidePanel>
+				<SidePanel title="Space Bomber" p1="Homer Simpson" p2="Lisa Simpson">by Raymond Chow</SidePanel>
 			</div>
 		);
 	}

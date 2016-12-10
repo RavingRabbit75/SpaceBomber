@@ -1,45 +1,33 @@
 import React from "react"
+import EnemyPanel from "./stateful_react_classes.js"
 
 
 export class GridTile extends React.Component {
 	constructor(props){
 		super(props);
+		this.state={display:"empty"};
 		this._onClick=this._onClick.bind(this);
 	}
 
 	_onClick(event){
-		// console.log(this.props.gridId);
-		// console.log((Math.floor(this.props.gridId/20))*50);
-		// var digit = String(Math.floor(this.props.gridId/2))
-		// var endDigit;
-		// if (digit.length>1){
-		// 	endDigit = digit.charAt(1)
-		// } else {
-		// 	endDigit = digit.charAt(0)
-		// }
+		this.props.returnId(this.props.gridId);
+	}
 
-		// var multiplyer;
-		// var xLoc;
-		// var digit2 = String(this.props.gridId);
-		// if (endDigit<5){
-		// 	if(digit2.length>1){
-		// 		xLoc = parseInt(digit2.charAt(1))*50;
-		// 	} else {
-		// 		xLoc = parseInt(digit2.charAt(0))*50;
-		// 	}
-		// } else {
-		// 	if(digit2.length>1){
-		// 		xLoc = parseInt(digit2.charAt(1))*50+500;
-		// 	} else {
-		// 		xLoc = parseInt(digit2.charAt(0))*50+500;
-		// 	}
-		// }
-		// console.log(xLoc);
+	setMarker(){
+		if(this.state.display==="hit"){
+			return(<div className="hitMarker"></div>);
+		} else if (this.state.display==="miss"){
+			return(<div className="missMarker"></div>);
+		} else {
+			return(<div></div>);
+		}
 	}
 
 	render(){
 		return(
-			<div onClick={this._onClick} className="gridTile"></div>
+			<div onClick={this._onClick} className="gridTile">
+				{this.setMarker()}
+			</div>
 		)
 	}
 };
@@ -62,7 +50,7 @@ export class Ship extends React.Component {
 	}
 
 	render(){
-		if(this.state.mode=="setup"){
+		if(this.state.mode==="setup"){
 			var ship = this.shipSetupMode();
 		} else {
 			var ship = this.shipPlayMode();
