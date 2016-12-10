@@ -8,6 +8,7 @@ class EnemyPanel extends React.Component {
 		this.state={layout:"game"};
 		this.enemyGridIds={};
 		this._handleClick = this._handleClick.bind(this);
+		this.tempVar=10000;
 	}
 	setupTiles() {
 		var grids=[];
@@ -18,11 +19,11 @@ class EnemyPanel extends React.Component {
 	}
 
 	_handleClick(evt){
-		console.log(this.props.gridId);
+
 	}
 
 	getGridId(id){
-		console.log(id);
+		this.tempVar=id;
 	}
 
 	getRandomNumber(min, max){
