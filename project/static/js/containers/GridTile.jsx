@@ -3,7 +3,6 @@ import React from "react"
 export default class GridTile extends React.Component {
 	constructor(props){
 		super(props);
-		this.state={display:"empty"};
 		this._onClick=this._onClick.bind(this);
 	}
 
@@ -12,9 +11,9 @@ export default class GridTile extends React.Component {
 	}
 
 	setMarker(){
-		if(this.state.display==="hit"){
+		if(this.props.indicator==="hit"){
 			return(<div className="hitMarker"></div>);
-		} else if (this.state.display==="miss"){
+		} else if (this.props.indicator==="miss"){
 			return(<div className="missMarker"></div>);
 		} else {
 			return(<div></div>);
