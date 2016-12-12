@@ -2,6 +2,7 @@ import React from "react"
 import App from "./App.jsx"
 import PlayerLabel from "./../containers/PlayerLabel.jsx"
 import EnemyShipsDestroyed from "./../containers/EnemyShipsDestroyed.jsx"
+import WhosTurn from "./../containers/WhosTurn.jsx"
 
 export default class SidePanel extends React.Component {
 	constructor(props){
@@ -25,6 +26,7 @@ export default class SidePanel extends React.Component {
 	}
 
 	gamePlayLayout(){
+		var player="p1";
 		return(
 			<div>
 				<div id="playerlabels">
@@ -33,6 +35,7 @@ export default class SidePanel extends React.Component {
 					{/* <button onClick={this.handleClick}>Change State</button> */}
 				</div>
 				<EnemyShipsDestroyed numDestroyed={this.props.shipsDestroyed}/>
+				<WhosTurn whosTurn={player}/>
 			</div>
 			
 		)
