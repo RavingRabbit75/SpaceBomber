@@ -1,9 +1,3 @@
-import React from "react"
-import ReactDOM from "react-dom"
-import App from "./components/App.jsx"
-
-ReactDOM.render(<App/>, document.getElementById("app"));
-
 $(function() {
 	var socket = io.connect('http://' + document.domain + ':' + location.port);
 	var $messages = $("#messages");

@@ -1,6 +1,7 @@
 import React from "react"
 import App from "./App.jsx"
 import PlayerLabel from "./../containers/PlayerLabel.jsx"
+import EnemyShipsDestroyed from "./../containers/EnemyShipsDestroyed.jsx"
 
 export default class SidePanel extends React.Component {
 	constructor(props){
@@ -25,11 +26,15 @@ export default class SidePanel extends React.Component {
 
 	gamePlayLayout(){
 		return(
-			<div id="playerlabels">
-				<PlayerLabel num="1" username={this.props.p1}/>
-				<PlayerLabel num="2" username={this.props.p2}/>
-				{/* <button onClick={this.handleClick}>Change State</button> */}
+			<div>
+				<div id="playerlabels">
+					<PlayerLabel num="1" username={this.props.p1}/>
+					<PlayerLabel num="2" username={this.props.p2}/>
+					{/* <button onClick={this.handleClick}>Change State</button> */}
+				</div>
+				<EnemyShipsDestroyed numDestroyed={this.props.shipsDestroyed}/>
 			</div>
+			
 		)
 	}
 

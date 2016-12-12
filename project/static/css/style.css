@@ -107,6 +107,36 @@
 }
 
 
+#shipsDestroyedStatus{
+	margin-top:50px; 
+	margin-left: 5px;
+}
+
+#shipsDestroyedTitle{
+	margin-bottom: 5px;
+}
+
+.ships-destroyed-marker-on {
+	background-image: url("./../images/shipsDestroyedBox_on.png");
+	width: 41px;
+	height: 41px;
+	position: relative;
+	display: inline-block;
+	padding: 0;
+	margin: 0;
+	margin-right: 10px;
+}
+
+.ships-destroyed-marker-off {
+	background-image: url("./../images/shipsDestroyedBox_off.png");
+	width: 41px;
+	height: 41px;
+	position: relative;
+	display: inline-block;
+	padding: 0;
+	margin: 0;
+	margin-right: 10px;
+}
 
 
 

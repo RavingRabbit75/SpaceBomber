@@ -25,7 +25,6 @@ export default class App extends React.Component{
 	}
 
 	initialRandomPlacement(gridArray){
-		
 		for(var x=0; x<3; x++){
 			var notDone=true;
 			do {
@@ -34,7 +33,6 @@ export default class App extends React.Component{
 					gridArray[gridNumber+20]==="empty" &&
 					gridArray[gridNumber+40]==="empty" )
 				{
-
 					gridArray[gridNumber]="ship"+x;
 					gridArray[gridNumber+20]="ship"+x;
 					gridArray[gridNumber+40]="ship"+x;
@@ -43,9 +41,7 @@ export default class App extends React.Component{
 				}
 
 			} while(notDone===true);
-
 		}
-
 	}
 
 	render() {
@@ -54,7 +50,10 @@ export default class App extends React.Component{
 			<div>
 				<EnemyPanel grid={this.state.player2}/>
 				<PlayerPanel grid={this.state.player1}/>
-				<SidePanel title="Space Bomber" p1="Homer Simpson" p2="Lisa Simpson">by Raymond Chow</SidePanel>
+				<SidePanel title="Space Bomber" 
+						   p1="Homer Simpson" 
+						   p2="Lisa Simpson"
+						   shipsDestroyed={1}>by Raymond Chow</SidePanel>
 			</div>
 		);
 	}
