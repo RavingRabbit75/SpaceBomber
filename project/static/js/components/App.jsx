@@ -4,9 +4,6 @@ import PlayerPanel from "./PlayerPanel.jsx"
 import EnemyPanel from "./EnemyPanel.jsx"
 
 
-
-
-
 export default class App extends React.Component{
 	constructor(props){
 		super(props);
