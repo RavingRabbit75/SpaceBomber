@@ -3,6 +3,10 @@ import SidePanel from "./SidePanel.jsx"
 import PlayerPanel from "./PlayerPanel.jsx"
 import EnemyPanel from "./EnemyPanel.jsx"
 
+
+
+
+
 export default class App extends React.Component{
 	constructor(props){
 		super(props);
@@ -18,7 +22,21 @@ export default class App extends React.Component{
 
 		this.initialRandomPlacement(this.state.player1);
 		this.initialRandomPlacement(this.state.player2);
+
+		this.socket = io.connect('http://' + document.domain + ':' + location.port);
+		this.socket.on('connect', function() {
+			console.log("client connected!")
+		    this.socket.emit('my stuff', {data: "hulk smash!"});
+		}.bind(this));
+		this.socket.on("stuff from home", function(delivery){
+			console.log(delivery);
+		}.bind(this));
 	}
+
+	sendStuffToServer(){
+		this.socket.emit('stuff from App', {data: "homer has a donut"});
+	}
+
 
 	getRandomNumber(min, max){
 		return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -45,7 +63,7 @@ export default class App extends React.Component{
 	}
 
 	render() {
-
+		this.sendStuffToServer();
 		return(
 			<div>
 				<EnemyPanel grid={this.state.player2}/>

@@ -1,4 +1,5 @@
+from project import socketio
 from project import app
 
 if __name__ == "__main__":
-	app.run(port=8000)
+	socketio.run(app, port=8000)

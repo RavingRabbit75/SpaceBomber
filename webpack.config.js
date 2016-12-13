@@ -2,7 +2,7 @@ module.exports = {
 	entry: "./project/static/js/main.js",
 	output: {
 		filename:"bundle.js",
-		path:"./project/templates/"
+		path:"./project/static/js/"
 	},
 	module: {
 		loaders:[{
