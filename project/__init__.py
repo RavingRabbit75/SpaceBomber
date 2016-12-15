@@ -121,7 +121,7 @@ def current_player_clicked(id):
 		emit("set_turn", "enemyTurn", room=playerSessionIds[0])
 		gameData["currentPlayerTurn"]=1
 	elif gameData["currentPlayerTurn"]==1:
-		emit("set_opp_player_screen", {"id":id, "whosTurn":"enemyTurn"}, room=playerSessionIds[0])
+		emit("set_opp_player_screen", {"id":id, "whosTurn":"myTurn"}, room=playerSessionIds[0])
 		emit("set_turn", "enemyTurn", room=playerSessionIds[1])
 		gameData["currentPlayerTurn"]=0
 

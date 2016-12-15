@@ -88,7 +88,7 @@ export default class PlayerPanel extends React.Component {
 			} else {
 				if (digit2.length===3){
 					xLoc = parseInt(digit2.charAt(2))*50+500;
-				} else if(digit.length===2){
+				} else if(digit2.length===2){
 					xLoc = parseInt(digit2.charAt(1))*50+500;
 				} else {
 					xLoc = parseInt(digit2.charAt(0))*50+500;

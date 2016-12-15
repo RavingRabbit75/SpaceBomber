@@ -16,7 +16,6 @@ export default class EnemyPanel extends React.Component {
 		}
 		this.getGridId = this.getGridId.bind(this);
 
-		this.clicked=false;
 	}
 
 	setupTiles() {
@@ -39,6 +38,7 @@ export default class EnemyPanel extends React.Component {
 
 
 	getGridId(id){
+		// this.clicked=false;
 		if (!this.clicked){
 			if (id!==null){
 				var updatedGrid = this.state.enemyGridIds.slice();
@@ -56,7 +56,7 @@ export default class EnemyPanel extends React.Component {
 			}
 		}
 		
-		this.clicked=true;
+		// this.clicked=true;
 	}
 
 	render(){

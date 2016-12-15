@@ -54,7 +54,9 @@ export default class App extends React.Component{
 
 		this.socket.on("set_opp_player_screen", function(delivery){
 			this.setState({
-				enemyShot: delivery.id,
+				enemyShot: delivery.id	
+			})
+			this.setState({
 				player_status: delivery.whosTurn
 			})
 		}.bind(this));
