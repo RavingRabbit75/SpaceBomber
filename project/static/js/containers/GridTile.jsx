@@ -8,7 +8,9 @@ export default class GridTile extends React.Component {
 
 	_onClick(event){
 		if (this.props.whosTurn==="myTurn"){
-			this.props.returnId(this.props.gridId);
+			if(this.props.indicator==="empty"){
+				this.props.returnId(this.props.gridId);
+			}
 		} else if (this.props.whosTurn==="enemyTurn"){
 			this.props.returnId(null)
 		}
