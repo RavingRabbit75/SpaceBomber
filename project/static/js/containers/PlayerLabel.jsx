@@ -7,7 +7,7 @@ export default class PlayerLabel extends React.Component {
 	render(){
 		return (
 			<div>
-				<span>Player {this.props.num}: {this.props.username}</span>
+				<span>{this.props.label}: {this.props.username}</span>
 			</div>
 		)
 	}

@@ -8,32 +8,63 @@ export default class App extends React.Component{
 	constructor(props){
 		super(props);
 		this.state={
-			player1: [],
-			player2: []
+			player: [], // player 1 object grid
+			enemy: [], // player 2 object grid
+			player1Name: this.props.p_name,
+			player2Name: "",
+			enemyShot: null,
+			player_status: "waitingToStart" // waitingToStart, myTurn, enemyTurn, win, lose
 		};
 
+		this.readyFlagged=false;
+		// set up initial grid tiles
 		for(var x=0; x<160; x++){
-			this.state.player1.push("empty");
-			this.state.player2.push("empty");
+			this.state.player.push("empty");
 		}
-
-		this.initialRandomPlacement(this.state.player1);
-		this.initialRandomPlacement(this.state.player2);
-
+		
+		this.initialRandomPlacement(this.state.player);
+		// this.initialRandomPlacement(this.state.player2);
 		this.socket = io.connect('http://' + document.domain + ':' + location.port);
 		this.socket.on('connect', function() {
-			console.log("client connected!")
-		    this.socket.emit('my stuff', {data: "hulk smash!"});
+			console.log(io().id);
 		}.bind(this));
-		this.socket.on("stuff from home", function(delivery){
-			console.log(delivery);
+
+		if(this.readyFlagged===false){
+			if (this.props.ready==="no"){
+				this.socket.emit('init_p1_obj_grid', {data: this.state.player});
+				this.readyFlagged=true;
+			} else if (this.props.ready==="yes") {
+				this.socket.emit('second player ready',{data: this.state.player});
+				this.readyFlagged=true;
+			}
+		}
+		
+		this.socket.on("enemy", function(delivery){
+			this.setState({
+				player2Name: delivery.oppName,
+				enemy: delivery.oppGrid
+			});
 		}.bind(this));
+
+		this.socket.on("set_turn", function(statusDelivery){
+			this.setState({
+				player_status: statusDelivery
+			})
+		}.bind(this));
+
+		this.socket.on("set_opp_player_screen", function(delivery){
+			this.setState({
+				enemyShot: delivery.id,
+				player_status: delivery.whosTurn
+			})
+		}.bind(this));
+
 	}
 
-	sendStuffToServer(){
-		this.socket.emit('stuff from App', {data: "homer has a donut"});
+	tellServerTitleClicked(id){
+		console.log("send to server:",id);
+		this.socket.emit("current_player_clicked", id)
 	}
-
 
 	getRandomNumber(min, max){
 		return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -60,15 +91,17 @@ export default class App extends React.Component{
 	}
 
 	render() {
-		this.sendStuffToServer();
 		return(
 			<div>
-				<EnemyPanel grid={this.state.player2}/>
-				<PlayerPanel grid={this.state.player1}/>
+				<EnemyPanel grid={this.state.enemy} 
+							whosTurn={this.state.player_status}
+							tileClickedFunc={this.tellServerTitleClicked.bind(this)}/>
+				<PlayerPanel grid={this.state.player} enemyShotGridId={this.state.enemyShot}/>
 				<SidePanel title="Space Bomber" 
-						   p1="Homer Simpson" 
-						   p2="Lisa Simpson"
-						   shipsDestroyed={1}>by Raymond Chow</SidePanel>
+						   p1={this.state.player1Name}
+						   p2={this.state.player2Name}
+						   shipsDestroyed={this.state.shipsDestroyed}
+						   whosTurn={this.state.player_status}>by Raymond Chow</SidePanel>
 			</div>
 		);
 	}

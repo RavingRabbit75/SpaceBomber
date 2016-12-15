@@ -6,20 +6,47 @@ import Ship from "./../containers/Ship.jsx"
 export default class PlayerPanel extends React.Component {
 	constructor(props){
 		super(props);
-		this.state={layout:"game"};
-		this.handleClick = this.handleClick.bind(this);
-		this.playerGridIds={};
-	}
-	setupTiles() {
-		var grids=[];
-		for(var x=0; x<160; x++){
-			grids.push(<GridTile returnId={this.getGridId} gridId={x} key={x}/>);
+		this.state={
+			layout:"game",
+			playerGridIds: [] // empty, miss or hit
+		};
+		// this.playerGridIds={};
+		for (var x=0; x<160; x++){
+			this.state.playerGridIds.push("empty");
 		}
-		return grids;
+		// this.props.enemyShotGridId
 	}
 
-	handleClick(evt){
-		
+	componentWillReceiveProps(nextProps){
+		// nextProps.enemyShotGridId
+		var updatedGrid = this.state.playerGridIds.slice();
+		if(this.props.grid[nextProps.enemyShotGridId]!=="empty"){
+			updatedGrid[nextProps.enemyShotGridId]="hit";
+		} else {
+			updatedGrid[nextProps.enemyShotGridId]="miss";
+		}
+		this.setState({
+			playerGridIds: updatedGrid
+		});
+	}
+
+	setupTiles() {
+	
+		return this.state.playerGridIds.map(function(gridItem,idx){
+			var indicator;
+			if (gridItem==="hit"){
+				indicator="hit";
+			} else if (gridItem==="miss") {
+				indicator="miss";
+			} else {
+				indicator="empty";
+			}
+			return <GridTile returnId={this.getGridId} 
+							 indicator={indicator}
+							 gridId={idx} 
+							 key={idx}/>;
+		}.bind(this));	
+
 	}
 
 	getGridId(id){
@@ -75,10 +102,11 @@ export default class PlayerPanel extends React.Component {
 		return ships;
 	}
 
+	
+
 	render(){
 		return (
 			<div id="playerPanel" className="">
-
 				<div id="objectLayerPlayer">
 					{this.placeShips(this.props.grid)}
 				</div>

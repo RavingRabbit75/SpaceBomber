@@ -8,10 +8,10 @@ export default class WhosTurn extends React.Component {
 
 	render(){
 		var playerTurn;
-		if (this.props.whosTurn==="p1"){
-			playerTurn="Player 1";
+		if (this.props.whosTurn==="myTurn"){
+			playerTurn="YOU";
 		} else {
-			playerTurn="Player 2";
+			playerTurn="ENEMY";
 		}
 		return(
 			<div id="whosTurn">

@@ -8,51 +8,26 @@ export default class SidePanel extends React.Component {
 	constructor(props){
 		super(props);
 		this.state={layout:"game"};
-		this.handleClick=this.handleClick.bind(this);
 	}
 
 	componentWillUpdate(nextProps, nextState){
-		console.log(this.state);
-		console.log(nextState);
-	}
-	
-	setupLayout(){
-		return(
-			<div>
-				<div></div>
-				<button onClick={this.handleClick}>Change State</button>
-			</div>
-		)
+		// console.log(this.state);
+		// console.log(nextState);
 	}
 
 	gamePlayLayout(){
-		var player="p1";
 		return(
 			<div>
 				<div id="playerlabels">
-					<PlayerLabel num="1" username={this.props.p1}/>
-					<PlayerLabel num="2" username={this.props.p2}/>
-					{/* <button onClick={this.handleClick}>Change State</button> */}
+					<PlayerLabel label="Player" username={this.props.p1}/>
+					<PlayerLabel label="Enemy" username={this.props.p2}/>
 				</div>
 				<EnemyShipsDestroyed numDestroyed={this.props.shipsDestroyed}/>
-				<WhosTurn whosTurn={player}/>
+				<WhosTurn whosTurn={this.props.whosTurn}/>
 			</div>
-			
 		)
 	}
 
-	// test state switching button
-	handleClick() {
-		if (this.state.layout==="setup"){
-			this.setState({layout:"game"})
-		} else {
-			this.setState({layout:"setup"})
-		}
-	}
-
-	handleCheck(){
-		this.setState({checked:true})
-	}
 	
 	render(){
 		if(this.state.layout=="setup"){

@@ -7,7 +7,11 @@ export default class GridTile extends React.Component {
 	}
 
 	_onClick(event){
-		this.props.returnId(this.props.gridId);
+		if (this.props.whosTurn==="myTurn"){
+			this.props.returnId(this.props.gridId);
+		} else if (this.props.whosTurn==="enemyTurn"){
+			this.props.returnId(null)
+		}
 	}
 
 
@@ -20,7 +24,6 @@ export default class GridTile extends React.Component {
 		const missMarkerStyle = {
 		  backgroundImage: 'url(' + imgUrl2 + ')',
 		}
-
 		if(this.props.indicator==="hit"){
 			return(<div style={hitMarkerStyle} className="hitMarker"></div>);
 		} else if (this.props.indicator==="miss"){
@@ -30,11 +33,13 @@ export default class GridTile extends React.Component {
 		}
 	}
 
+
 	render(){
 		var imgUrl="./../static/images/singleTile.png";
 		const gridTileStyle = {
 		  backgroundImage: 'url(' + imgUrl + ')',
 		}
+
 		return(
 			<div onClick={this._onClick} style={gridTileStyle} className="gridTile">
 				{this.setMarker()}

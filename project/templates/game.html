@@ -9,13 +9,14 @@
 	
 </head>
 <body>
+<div id="app" class="border"></div>
 
-<form id="searchForm" action="{{url_for('game')}}" method="GET">
-	<div>
-		<input type="text" name="username" placeholder="Enter Username">
-	</div>
-	<button type="submit" id="submitBtn">Submit</button>
-</form>
+<script>
+	var p_name="{{p_name}}";
+	var ready="{{ready}}"
+</script>
+<script src="{{url_for('static', filename='./js/bundle.js')}}"></script>
+
 </body>
 </html>
 

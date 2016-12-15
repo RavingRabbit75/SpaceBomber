@@ -15,6 +15,8 @@ export default class EnemyPanel extends React.Component {
 			this.state.enemyGridIds.push("empty");
 		}
 		this.getGridId = this.getGridId.bind(this);
+
+		this.clicked=false;
 	}
 
 	setupTiles() {
@@ -27,23 +29,34 @@ export default class EnemyPanel extends React.Component {
 			} else {
 				indicator="empty";
 			}
-			return <GridTile returnId={this.getGridId} indicator={indicator} gridId={idx} key={idx}/>;
+			return <GridTile returnId={this.getGridId} 
+							 indicator={indicator}
+							 whosTurn={this.props.whosTurn}
+							 gridId={idx} 
+							 key={idx}/>;
 		}.bind(this));		
 	}
 
 
 	getGridId(id){
-		console.log(id);
-		console.log(this.props.grid[id]);
-		var updatedGrid = this.state.enemyGridIds.slice();
-		if(this.props.grid[id]!=="empty"){
-			updatedGrid[id]="hit";
-		} else {
-			updatedGrid[id]="miss";
+		if (!this.clicked){
+			if (id!==null){
+				var updatedGrid = this.state.enemyGridIds.slice();
+				if(this.props.grid[id]!=="empty"){
+					updatedGrid[id]="hit";
+				} else {
+					updatedGrid[id]="miss";
+				}
+				this.setState({
+					enemyGridIds: updatedGrid
+				});
+				// call app function to inform server
+				this.props.tileClickedFunc(id)
+
+			}
 		}
-		this.setState({
-			enemyGridIds: updatedGrid
-		});
+		
+		this.clicked=true;
 	}
 
 	render(){
