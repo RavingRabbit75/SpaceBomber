@@ -119,10 +119,17 @@ def current_player_clicked(id):
 
 @socketio.on("ship_destroyed")
 def update_ship_destroyed(ship_destroyed_count):
-	print (ship_destroyed_count,request.sid)
+	# print (ship_destroyed_count,request.sid)
 	playerIdx = playerSessionIds.index(request.sid)
 	gameData["shipsDestroyed"][playerIdx]=ship_destroyed_count
-
+	print("=================================")
+	print(gameData["shipsDestroyed"][0], gameData["shipsDestroyed"][1])
+	if gameData["shipsDestroyed"][0]==3:
+		emit("set_endGame", "win", room=playerSessionIds[0])
+		emit("set_endGame", "lose", room=playerSessionIds[1])
+	elif gameData["shipsDestroyed"][1]==3:
+		emit("set_endGame", "lose", room=playerSessionIds[0])
+		emit("set_endGame", "win", room=playerSessionIds[1])
 
 
 

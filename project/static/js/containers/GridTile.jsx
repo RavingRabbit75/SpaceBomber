@@ -11,7 +11,7 @@ export default class GridTile extends React.Component {
 			if(this.props.indicator==="empty"){
 				this.props.returnId(this.props.gridId);
 			}
-		} else if (this.props.whosTurn==="enemyTurn"){
+		} else if (this.props.whosTurn!=="myTurn"){
 			this.props.returnId(null)
 		}
 	}

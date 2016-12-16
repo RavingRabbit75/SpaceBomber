@@ -64,6 +64,13 @@ export default class App extends React.Component{
 			})
 		}.bind(this));
 
+
+		this.socket.on("set_endGame", function(endGame_status){
+			this.setState({
+				player_status: endGame_status
+			})
+		}.bind(this));
+
 	}
 
 	tellServerTileClicked(id){
@@ -72,8 +79,6 @@ export default class App extends React.Component{
 	}
 
 	tellServerShipDestroyed(shipsDestroyedCount){
-		debugger
-		console.log("TELL SERVER SHIP DESTROYED CALLED")
 		this.socket.emit("ship_destroyed", shipsDestroyedCount);
 		this.setState({
 			shipsDestroyed:shipsDestroyedCount

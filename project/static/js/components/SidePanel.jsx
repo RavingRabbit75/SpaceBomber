@@ -7,7 +7,6 @@ import WhosTurn from "./../containers/WhosTurn.jsx"
 export default class SidePanel extends React.Component {
 	constructor(props){
 		super(props);
-		this.state={layout:"game"};
 	}
 
 	componentWillUpdate(nextProps, nextState){
@@ -28,13 +27,8 @@ export default class SidePanel extends React.Component {
 		)
 	}
 
-	
 	render(){
-		if(this.state.layout=="setup"){
-			var layout = this.setupLayout();
-		} else {
-			var layout = this.gamePlayLayout();
-		}
+		var layout = this.gamePlayLayout();
 
 		return (
 			<div id="sidePanel">
@@ -42,12 +36,9 @@ export default class SidePanel extends React.Component {
 					<h3 id="title">{this.props.title}</h3>
 					<p>{this.props.children}</p>
 				</div>
-
 				<div>
 					{layout}
 				</div>
-				
-				
 			</div>
 		)
 	}
