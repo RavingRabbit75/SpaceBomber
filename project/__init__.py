@@ -77,24 +77,14 @@ def disconnect_handler():
 @socketio.on("init_p1_obj_grid")
 def handle_received_data(stuff):
 	gameData["p1_ObjGrid"] = stuff["data"]
-	# print(gameData["p1_ObjGrid"])
 
 
-@socketio.on("second player ready")
+@socketio.on("second_player_ready")
 def handle_second_player_ready(stuff):
 	gameData["p2_ObjGrid"] = stuff["data"]
-	# print(gameData["p2_ObjGrid"])
 	sendPlayersOppData()
 
-# gameData={
-# 	"p1_ObjGrid":[],
-# 	"p2_ObjGrid":[],
-# 	"p1_HitMissGrid":[],
-# 	"p2_HitMissGrid":[],
-# 	"shipsDestroyed":[0,0],
-# 	"turnNumber":0,
-# 	"currentPlayerTurn":0
-# }
+
 def sendPlayersOppData():
 	emit("enemy", {"oppName":playerNames[1], "oppGrid":gameData["p2_ObjGrid"]}, room=playerSessionIds[0])
 	emit("enemy", {"oppName":playerNames[0], "oppGrid":gameData["p1_ObjGrid"]}, room=playerSessionIds[1])
@@ -127,7 +117,11 @@ def current_player_clicked(id):
 
 	
 
-
+@socketio.on("ship_destroyed")
+def update_ship_destroyed(ship_destroyed_count):
+	print (ship_destroyed_count,request.sid)
+	playerIdx = playerSessionIds.index(request.sid)
+	gameData["shipsDestroyed"][playerIdx]=ship_destroyed_count
 
 
 

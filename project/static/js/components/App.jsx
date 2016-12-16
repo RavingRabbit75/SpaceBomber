@@ -13,6 +13,7 @@ export default class App extends React.Component{
 			player1Name: this.props.p_name,
 			player2Name: "",
 			enemyShot: null,
+			shipsDestroyed: 0,
 			player_status: "waitingToStart" // waitingToStart, myTurn, enemyTurn, win, lose
 		};
 
@@ -23,7 +24,6 @@ export default class App extends React.Component{
 		}
 		
 		this.initialRandomPlacement(this.state.player);
-		// this.initialRandomPlacement(this.state.player2);
 		this.socket = io.connect('http://' + document.domain + ':' + location.port);
 		this.socket.on('connect', function() {
 			console.log(io().id);
@@ -34,12 +34,13 @@ export default class App extends React.Component{
 				this.socket.emit('init_p1_obj_grid', {data: this.state.player});
 				this.readyFlagged=true;
 			} else if (this.props.ready==="yes") {
-				this.socket.emit('second player ready',{data: this.state.player});
+				this.socket.emit('second_player_ready',{data: this.state.player});
 				this.readyFlagged=true;
 			}
 		}
 		
 		this.socket.on("enemy", function(delivery){
+			console.log("enemy");
 			this.setState({
 				player2Name: delivery.oppName,
 				enemy: delivery.oppGrid
@@ -47,12 +48,14 @@ export default class App extends React.Component{
 		}.bind(this));
 
 		this.socket.on("set_turn", function(statusDelivery){
+			console.log("set_turn");
 			this.setState({
 				player_status: statusDelivery
 			})
 		}.bind(this));
 
 		this.socket.on("set_opp_player_screen", function(delivery){
+			console.log("set_opp_player_screen");
 			this.setState({
 				enemyShot: delivery.id	
 			})
@@ -63,9 +66,18 @@ export default class App extends React.Component{
 
 	}
 
-	tellServerTitleClicked(id){
-		console.log("send to server:",id);
+	tellServerTileClicked(id){
+		// console.log("send to server:",id);
 		this.socket.emit("current_player_clicked", id)
+	}
+
+	tellServerShipDestroyed(shipsDestroyedCount){
+		debugger
+		console.log("TELL SERVER SHIP DESTROYED CALLED")
+		this.socket.emit("ship_destroyed", shipsDestroyedCount);
+		this.setState({
+			shipsDestroyed:shipsDestroyedCount
+		});
 	}
 
 	getRandomNumber(min, max){
@@ -97,7 +109,8 @@ export default class App extends React.Component{
 			<div>
 				<EnemyPanel grid={this.state.enemy} 
 							whosTurn={this.state.player_status}
-							tileClickedFunc={this.tellServerTitleClicked.bind(this)}/>
+							tileClickedFunc={this.tellServerTileClicked.bind(this)}
+							shipDestroyedFunc={this.tellServerShipDestroyed.bind(this)} />
 				<PlayerPanel grid={this.state.player} enemyShotGridId={this.state.enemyShot}/>
 				<SidePanel title="Space Bomber" 
 						   p1={this.state.player1Name}

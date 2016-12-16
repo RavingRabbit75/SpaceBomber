@@ -26,7 +26,7 @@ export default class GridTile extends React.Component {
 		const missMarkerStyle = {
 		  backgroundImage: 'url(' + imgUrl2 + ')',
 		}
-		if(this.props.indicator==="hit"){
+		if(this.props.indicator==="hit") {
 			return(<div style={hitMarkerStyle} className="hitMarker"></div>);
 		} else if (this.props.indicator==="miss"){
 			return(<div style={missMarkerStyle} className="missMarker"></div>);
