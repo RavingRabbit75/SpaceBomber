@@ -1,5 +1,5 @@
 from project import db
-# from sqlalchemy.dialects.postgresql import JSON
+import random
 
 class Game(db.Model):
 	__tablename__ = "games"
@@ -14,6 +14,9 @@ class Game(db.Model):
 		# number of turns?
 		# current player turn
 
+	letters_tuple = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
+	numbers_tuple = ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
+
 	def __init__(self, player1, player2, game_data):
 		self.player1 = player1
 		self.player2 = player2
@@ -22,3 +25,6 @@ class Game(db.Model):
 	def __repr__(self):
 		return "Game is {} vs {}.".format(self.player1, self.player2)
 
+
+	def get_random_game_id():
+		return "".join([random.choice(Game.letters_tuple[0:]+Game.numbers_tuple[0:]) for i in range(25)])

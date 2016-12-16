@@ -24,10 +24,18 @@ export default class App extends React.Component{
 		}
 		
 		this.initialRandomPlacement(this.state.player);
-		this.socket = io.connect('http://' + document.domain + ':' + location.port);
+
+		var namespace = '/sillybunny';
+		this.socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
 		this.socket.on('connect', function() {
 			console.log(io().id);
 		}.bind(this));
+
+		// this.socket = io.connect('http://' + document.domain + ':' + location.port);
+		// this.socket.on('connect', function() {
+		// 	console.log(io().id);
+		// }.bind(this));
+
 
 		if(this.readyFlagged===false){
 			if (this.props.ready==="no"){
@@ -40,7 +48,6 @@ export default class App extends React.Component{
 		}
 		
 		this.socket.on("enemy", function(delivery){
-			console.log("enemy");
 			this.setState({
 				player2Name: delivery.oppName,
 				enemy: delivery.oppGrid
@@ -48,14 +55,12 @@ export default class App extends React.Component{
 		}.bind(this));
 
 		this.socket.on("set_turn", function(statusDelivery){
-			console.log("set_turn");
 			this.setState({
 				player_status: statusDelivery
 			})
 		}.bind(this));
 
 		this.socket.on("set_opp_player_screen", function(delivery){
-			console.log("set_opp_player_screen");
 			this.setState({
 				enemyShot: delivery.id	
 			})
@@ -74,7 +79,6 @@ export default class App extends React.Component{
 	}
 
 	tellServerTileClicked(id){
-		// console.log("send to server:",id);
 		this.socket.emit("current_player_clicked", id)
 	}
 

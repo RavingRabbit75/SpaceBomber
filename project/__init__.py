@@ -4,6 +4,7 @@ from flask_modus import Modus
 from flask_sqlalchemy import SQLAlchemy
 import os
 
+
 app=Flask(__name__)
 socketio=SocketIO(app)
 
@@ -23,6 +24,13 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db=SQLAlchemy(app)
 
 from project.games.models import Game
+
+
+player_queue=[]
+game_instances=[]
+
+
+print(Game.get_random_game_id())
 
 # 0 is p1, 1 is p2
 playerslots=[False,False]
@@ -59,27 +67,36 @@ def game():
 
 
 
-@socketio.on("connect")
-def connect_handler():
-	print("CONNECTION MADE: ")
+# @socketio.on("connect")
+# def connect_handler():
+# 	print("CONNECTION MADE: ")
+# 	playerSessionIds.append(request.sid)
+# 	print(playerSessionIds)
+
+
+bubbleSpace = "/sillybunny"
+
+@socketio.on("connect", namespace=bubbleSpace)
+def connect_handler2():
+	print("CONNECTION MADE: {}".format(bubbleSpace))
 	playerSessionIds.append(request.sid)
-	print(playerSessionIds)
-	# return emit('new user', 'A new user has entered the chat!', broadcast=True)
+	print(request.sid)
 
 
-@socketio.on("disconnect")
+
+@socketio.on("disconnect", namespace=bubbleSpace)
 def disconnect_handler():
 	# users_connected.remove("player1")
 	print("CLIENT DISCONNECTED")
 	print(request.sid)
 	
 
-@socketio.on("init_p1_obj_grid")
+@socketio.on("init_p1_obj_grid", namespace=bubbleSpace)
 def handle_received_data(stuff):
 	gameData["p1_ObjGrid"] = stuff["data"]
 
 
-@socketio.on("second_player_ready")
+@socketio.on("second_player_ready", namespace=bubbleSpace)
 def handle_second_player_ready(stuff):
 	gameData["p2_ObjGrid"] = stuff["data"]
 	sendPlayersOppData()
@@ -104,7 +121,7 @@ def setPlayerTurn(player):
 
 
 
-@socketio.on("current_player_clicked")
+@socketio.on("current_player_clicked", namespace=bubbleSpace)
 def current_player_clicked(id):
 	if gameData["currentPlayerTurn"]==0:
 		emit("set_opp_player_screen", {"id":id, "whosTurn":"myTurn"}, room=playerSessionIds[1])
@@ -117,13 +134,10 @@ def current_player_clicked(id):
 
 	
 
-@socketio.on("ship_destroyed")
+@socketio.on("ship_destroyed", namespace=bubbleSpace)
 def update_ship_destroyed(ship_destroyed_count):
-	# print (ship_destroyed_count,request.sid)
 	playerIdx = playerSessionIds.index(request.sid)
 	gameData["shipsDestroyed"][playerIdx]=ship_destroyed_count
-	print("=================================")
-	print(gameData["shipsDestroyed"][0], gameData["shipsDestroyed"][1])
 	if gameData["shipsDestroyed"][0]==3:
 		emit("set_endGame", "win", room=playerSessionIds[0])
 		emit("set_endGame", "lose", room=playerSessionIds[1])
