@@ -8,4 +8,4 @@ if os.environ.get("ENV") == "production":
 	debug=False
 
 if __name__ == "__main__":
-	socketio.run(app, debug=app.debug)
+	socketio.run(app, debug=debug)
