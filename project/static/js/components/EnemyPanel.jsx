@@ -33,7 +33,7 @@ export default class EnemyPanel extends React.Component {
 				shipDestroyedCount++;
 			}
 		}
-		this.props.shipDestroyedFunc(shipDestroyedCount);
+		this.props.shipDestroyedFunc(shipDestroyedCount, this.state.enemyGridIds);
 	}
 
 

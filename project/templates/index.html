@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<form id="searchForm" action="{{url_for('game')}}" method="GET">
+<form id="searchForm" action="/game/{{game_id}}" method="POST">
 	<div>
 		<input type="text" name="username" placeholder="Enter Username">
 	</div>

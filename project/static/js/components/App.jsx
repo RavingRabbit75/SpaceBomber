@@ -25,17 +25,10 @@ export default class App extends React.Component{
 		
 		this.initialRandomPlacement(this.state.player);
 
-		var namespace = '/sillybunny';
-		this.socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
+		this.socket = io.connect('http://' + document.domain + ':' + location.port);
 		this.socket.on('connect', function() {
 			console.log(io().id);
 		}.bind(this));
-
-		// this.socket = io.connect('http://' + document.domain + ':' + location.port);
-		// this.socket.on('connect', function() {
-		// 	console.log(io().id);
-		// }.bind(this));
-
 
 		if(this.readyFlagged===false){
 			if (this.props.ready==="no"){
@@ -82,8 +75,8 @@ export default class App extends React.Component{
 		this.socket.emit("current_player_clicked", id)
 	}
 
-	tellServerShipDestroyed(shipsDestroyedCount){
-		this.socket.emit("ship_destroyed", shipsDestroyedCount);
+	tellServerShipDestroyed(shipsDestroyedCount, enemyGridIds){
+		this.socket.emit("ship_destroyed", {shipsDC: shipsDestroyedCount, enemyGID: enemyGridIds});
 		this.setState({
 			shipsDestroyed:shipsDestroyedCount
 		});

@@ -23,14 +23,12 @@ else:
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db=SQLAlchemy(app)
 
+
 from project.games.models import Game
 
 
 player_queue=[]
 game_instances=[]
-
-
-print(Game.get_random_game_id())
 
 # 0 is p1, 1 is p2
 playerslots=[False,False]
@@ -47,56 +45,61 @@ gameData={
 }
 
 @app.route("/")
-def root():
-	return render_template("index.html")
+def root(game_id=None):
+	if game_id is None:
+		print("No game ID ===========================")
+		game_id = Game.get_random_gameId()
+		print("Game ID was made for you: {}".format(game_id))
+
+	return render_template("index.html", game_id=game_id)
 
 
-@app.route("/game")
-def game():
-	if playerslots[0] and playerslots[1]:
-		return redirect("/")
+@app.route("/game/<string:game_id>", methods=["GET", "POST"])
+def game(game_id):
+	print("==============================")
+	print(game_id)
 
-	if playerslots[0]==False:
-		playerslots[0]=True
-		playerNames[0]=request.args.get("username")
-		return render_template("game.html",p_name=playerNames[0],ready="no")
-	elif playerslots[1]==False:
-		playerslots[1]=True
-		playerNames[1]=request.args.get("username")
-		return render_template("game.html",p_name=playerNames[1],ready="yes")
+	if request.method=="POST":
+
+		if playerslots[0] and playerslots[1]:
+			return redirect("/")
+
+		if playerslots[0]==False:
+			playerslots[0]=True
+			playerNames[0]=request.form["username"]
+			return render_template("game.html",p_name=playerNames[0],ready="no")
+		elif playerslots[1]==False:
+			playerslots[1]=True
+			playerNames[1]=request.form["username"]
+			return render_template("game.html",p_name=playerNames[1],ready="yes")
+
+	if request.method=="GET":
+		return render_template("index.html", game_id=game_id)
 
 
 
-# @socketio.on("connect")
-# def connect_handler():
-# 	print("CONNECTION MADE: ")
-# 	playerSessionIds.append(request.sid)
-# 	print(playerSessionIds)
 
-
-bubbleSpace = "/sillybunny"
-
-@socketio.on("connect", namespace=bubbleSpace)
-def connect_handler2():
-	print("CONNECTION MADE: {}".format(bubbleSpace))
+@socketio.on("connect")
+def connect_handler():
+	print("CONNECTION MADE")
 	playerSessionIds.append(request.sid)
 	print(request.sid)
 
 
 
-@socketio.on("disconnect", namespace=bubbleSpace)
+@socketio.on("disconnect")
 def disconnect_handler():
 	# users_connected.remove("player1")
 	print("CLIENT DISCONNECTED")
 	print(request.sid)
 	
 
-@socketio.on("init_p1_obj_grid", namespace=bubbleSpace)
+@socketio.on("init_p1_obj_grid")
 def handle_received_data(stuff):
 	gameData["p1_ObjGrid"] = stuff["data"]
 
 
-@socketio.on("second_player_ready", namespace=bubbleSpace)
+@socketio.on("second_player_ready")
 def handle_second_player_ready(stuff):
 	gameData["p2_ObjGrid"] = stuff["data"]
 	sendPlayersOppData()
@@ -121,7 +124,7 @@ def setPlayerTurn(player):
 
 
 
-@socketio.on("current_player_clicked", namespace=bubbleSpace)
+@socketio.on("current_player_clicked")
 def current_player_clicked(id):
 	if gameData["currentPlayerTurn"]==0:
 		emit("set_opp_player_screen", {"id":id, "whosTurn":"myTurn"}, room=playerSessionIds[1])
@@ -134,10 +137,15 @@ def current_player_clicked(id):
 
 	
 
-@socketio.on("ship_destroyed", namespace=bubbleSpace)
-def update_ship_destroyed(ship_destroyed_count):
+@socketio.on("ship_destroyed")
+def update_ship_destroyed(payload):
 	playerIdx = playerSessionIds.index(request.sid)
-	gameData["shipsDestroyed"][playerIdx]=ship_destroyed_count
+	gameData["shipsDestroyed"][playerIdx]=payload["shipsDC"]
+	if playerIdx==0:
+		gameData["p1_HitMissGrid"]=payload["enemyGID"]
+	elif playerIdx==1:
+		gameData["p2_HitMissGrid"]=payload["enemyGID"]
+
 	if gameData["shipsDestroyed"][0]==3:
 		emit("set_endGame", "win", room=playerSessionIds[0])
 		emit("set_endGame", "lose", room=playerSessionIds[1])
@@ -147,7 +155,9 @@ def update_ship_destroyed(ship_destroyed_count):
 
 
 
-
+@app.errorhandler(404)
+def page_not_found(e):
+	return render_template("404.html"), 404
 
 
 
