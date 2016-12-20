@@ -27,15 +27,17 @@ export default class App extends React.Component{
 
 		this.socket = io.connect('http://' + document.domain + ':' + location.port);
 		this.socket.on('connect', function() {
-			console.log(io().id);
+			Cookies.set('game_id', this.props.game_id, { expires: 7 });
+			Cookies.set('username', this.props.p_name, { expires: 7 });
 		}.bind(this));
+
 
 		if(this.readyFlagged===false){
 			if (this.props.ready==="no"){
-				this.socket.emit('init_p1_obj_grid', {data: this.state.player});
+				this.socket.emit('init_p1_obj_grid', {game_id: this.props.game_id, data: this.state.player});
 				this.readyFlagged=true;
 			} else if (this.props.ready==="yes") {
-				this.socket.emit('second_player_ready',{data: this.state.player});
+				this.socket.emit('second_player_ready',{game_id: this.props.game_id, data: this.state.player});
 				this.readyFlagged=true;
 			}
 		}
@@ -72,11 +74,11 @@ export default class App extends React.Component{
 	}
 
 	tellServerTileClicked(id){
-		this.socket.emit("current_player_clicked", id)
+		this.socket.emit("current_player_clicked", {id:id, game_id: this.props.game_id})
 	}
 
 	tellServerShipDestroyed(shipsDestroyedCount, enemyGridIds){
-		this.socket.emit("ship_destroyed", {shipsDC: shipsDestroyedCount, enemyGID: enemyGridIds});
+		this.socket.emit("ship_destroyed", {shipsDC: shipsDestroyedCount, enemyGID: enemyGridIds, game_id: this.props.game_id});
 		this.setState({
 			shipsDestroyed:shipsDestroyedCount
 		});
