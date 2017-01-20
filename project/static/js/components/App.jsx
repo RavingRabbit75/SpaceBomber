@@ -23,13 +23,21 @@ export default class App extends React.Component{
 			this.state.player.push("empty");
 		}
 		
-		this.initialRandomPlacement(this.state.player);
+
+		if(Cookies.get("username")!==this.props.p_name || Cookies.get("game_id")!==this.props.game_id){
+			this.initialRandomPlacement(this.state.player);
+		}
 
 		this.socket = io.connect('http://' + document.domain + ':' + location.port);
 		this.socket.on('connect', function() {
 			Cookies.set('game_id', this.props.game_id, { expires: 7 });
 			Cookies.set('username', this.props.p_name, { expires: 7 });
 		}.bind(this));
+
+
+		if(Cookies.get("username")===this.props.p_name && Cookies.get("game_id")===this.props.game_id){
+			this.socket.emit('get_previous_grid', {game_id: this.props.game_id, username: this.props.p_name});
+		}
 
 
 		if(this.readyFlagged===false){
@@ -41,6 +49,12 @@ export default class App extends React.Component{
 				this.readyFlagged=true;
 			}
 		}
+
+		this.socket.on("reload_grid", function(delivery){
+			this.setState({
+				player: delivery.player_ObjGrid
+			});
+		}.bind(this));
 		
 		this.socket.on("enemy", function(delivery){
 			this.setState({

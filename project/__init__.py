@@ -27,22 +27,8 @@ db=SQLAlchemy(app)
 from project.games.models import Game
 
 
-# player_queue=[]
 game_instances=[]
 
-# 0 is p1, 1 is p2
-# playerslots=[False,False]
-# playerNames=["",""]
-# playerSessionIds=[]
-# gameData={
-# 	"p1_ObjGrid":[],
-# 	"p2_ObjGrid":[],
-# 	"p1_HitMissGrid":[],
-# 	"p2_HitMissGrid":[],
-# 	"shipsDestroyed":[0,0],
-# 	"turnNumber":0,
-# 	"currentPlayerTurn":0
-# }
 
 @app.route("/")
 def root(game_id=None):
@@ -95,7 +81,8 @@ def game(game_id):
 def connect_handler():
 	print("CONNECTION MADE Session Id: =================")
 	print(request.sid)
-
+	print(request.cookies.get("username"))
+	print(request.cookies.get("game_id"))
 
 
 @socketio.on("disconnect")
@@ -103,6 +90,18 @@ def disconnect_handler():
 	print("CLIENT DISCONNECTED Session Id: =================")
 	print(request.sid)
 	
+
+
+@socketio.on("get_previous_grid")
+def get_previous_grid(payload):
+	gameInstance = get_game_byId(game_instances, payload["game_id"])
+	if gameInstance.player1 == payload["username"]:
+		gameInstance.p1_sid = request.sid
+		emit("reload_grid", {"player_ObjGrid":gameInstance.p1_ObjGrid}, room=gameInstance.p1_sid)
+	elif gameInstance.player2 == payload["username"]:
+		gameInstance.p2_sid = request.sid
+		emit("reload_grid", {"player_ObjGrid":gameInstance.p2_ObjGrid}, room=gameInstance.p2_sid)
+
 
 @socketio.on("init_p1_obj_grid")
 def handle_received_data(stuff):
