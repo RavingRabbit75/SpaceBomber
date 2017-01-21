@@ -2,6 +2,7 @@
 	border: 1px solid #45d6e0
 }
 
+
 .black-bg{
 	background-color: #000000;
 }
@@ -10,6 +11,36 @@
 	margin: 0px;
 	padding: 0px;
 }
+
+/* index.html page specific --------------------------*/
+#titleArea{
+	position: absolute;
+	width: 100%;
+	height: auto;
+	z-index: 10;
+}
+
+.title-image {
+	width:100%;
+	height: auto;
+}
+.title{
+	position: relative;
+	z-index: 100;
+}
+
+.titleArea2{
+	position: relative;
+}
+
+#indexMain {
+	position: relative;
+	top: 40px;
+	z-index: 100;
+}
+
+
+/* index.html page specific --------------------------*/
 
 #app_container{
 	position: absolute;
@@ -167,4 +198,22 @@
 }
 
 
+
+
+/* this gets rid of a faint line that bootstrap causes*/
+/*.navbar{
+	border: 0;
+}
+.navbar-form, .navbar-left {
+	-webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    -o-box-shadow: none;
+    box-shadow: none;
+}
+.navbar-default { 
+	outline: none; 
+	border:none !important; 
+	box-shadow:none !important; 
+}
+*/
 

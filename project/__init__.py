@@ -30,6 +30,15 @@ from project.games.models import Game
 game_instances=[]
 
 
+
+@app.before_request
+def before_request():
+    if request.url.startswith('https://'):
+        url = request.url.replace('https://', 'http://', 1)
+        code = 301
+        return redirect(url, code=code)
+
+
 @app.route("/")
 def root(game_id=None):
 	if game_id is None:
