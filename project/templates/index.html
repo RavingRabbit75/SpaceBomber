@@ -23,12 +23,21 @@
 </div>
 
 <div id="indexMain" class="container-fluid">
-	<form id="searchForm" class="navbar-form navbar-left" action="/game/{{game_id}}" method="POST">
-		<div class="form-group">
-			<input type="text" name="username" class="form-control form-bottom-margin" placeholder="Enter Username">
-		</div>
-		<button type="submit" id="submitBtn" class="btn btn-default">Start Game</button>
-	</form>
+	<div class="col-xs-1">
+		
+	</div>
+	<div class="col-xs-10">
+		<form id="searchForm" class="form" action="/game/{{game_id}}" method="POST">
+			<div class="input-group">
+				<input type="text" name="username" class="form-control" placeholder="Enter Username">
+				<span class="input-group-btn">
+					<button class="btn btn-secondary" type="submit">Start Game</button>
+				</span>
+		    </div>
+	    </form>
+	<div class="col-xs-1">
+		
+	</div>
 </div>
 </body>
 </html>
