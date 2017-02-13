@@ -48,6 +48,19 @@
 	z-index: 100;
 }
 
+#indexMain2 {
+	position: relative;
+	top: 100px;
+	z-index: 200;
+}
+
+.text{
+	color: white;
+}
+
+.indent{
+	margin-left: 50px;
+}
 
 
 /* index.html page specific --------------------------*/
